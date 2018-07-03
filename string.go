@@ -1,15 +1,28 @@
 // Package goutil provides commonly used convenience functions for manipulating
 // certain data types and also provides reusable type-generic algorithms
 //
-//   file: file.go
+//   file: string.go
 //   desc: routines for manipulating strings
 //   auth: ardnew
 //
 package goutil
 
 import (
+	"math/rand"
+	"time"
 	"unicode/utf8"
 )
+
+var (
+	alphaRune        []rune
+	alphaNumericRune []rune
+)
+
+func init() {
+	alphaRune = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	alphaNumericRune = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	rand.Seed(time.Now().UTC().UnixNano())
+}
 
 func Reverse(s string) string {
 	rn := utf8.RuneCountInString(s)
@@ -40,4 +53,22 @@ func Concat(s, t string) (string, int) {
 	m := copy(r, []rune(s))
 	n := copy(r[m:], []rune(t))
 	return string(r), m + n
+}
+
+func RandAlpha(n uint) string {
+	s := make([]rune, n)
+	m := len(alphaRune)
+	for i := uint(0); i < n; i++ {
+		s[i] = alphaRune[rand.Intn(m)]
+	}
+	return string(s)
+}
+
+func RandAlphaNumeric(n uint) string {
+	s := make([]rune, n)
+	m := len(alphaNumericRune)
+	for i := uint(0); i < n; i++ {
+		s[i] = alphaNumericRune[rand.Intn(m)]
+	}
+	return string(s)
 }

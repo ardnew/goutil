@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+var (
+	benchResult       string
+	benchReverseInput map[int]string
+)
+
+func init() {
+	benchReverseInput = map[int]string{
+		0:    "",
+		1:    RandAlphaNumeric(1),
+		2:    RandAlphaNumeric(2),
+		3:    RandAlphaNumeric(3),
+		10:   RandAlphaNumeric(10),
+		20:   RandAlphaNumeric(20),
+		30:   RandAlphaNumeric(30),
+		100:  RandAlphaNumeric(100),
+		200:  RandAlphaNumeric(200),
+		300:  RandAlphaNumeric(300),
+		1000: RandAlphaNumeric(1000),
+		2000: RandAlphaNumeric(2000),
+		3000: RandAlphaNumeric(3000),
+	}
+}
+
 func TestReverse(t *testing.T) {
 	cases := []struct {
 		name, input, expect string
@@ -28,6 +51,28 @@ func TestReverse(t *testing.T) {
 		}
 	}
 }
+
+func benchReverse(s string, b *testing.B) {
+	var r string
+	for n := 0; n < b.N; n++ {
+		r = Reverse(s)
+	}
+	benchResult = r
+}
+
+func BenchmarkReverse0(b *testing.B)    { benchReverse(benchReverseInput[0], b) }
+func BenchmarkReverse1(b *testing.B)    { benchReverse(benchReverseInput[1], b) }
+func BenchmarkReverse2(b *testing.B)    { benchReverse(benchReverseInput[2], b) }
+func BenchmarkReverse3(b *testing.B)    { benchReverse(benchReverseInput[3], b) }
+func BenchmarkReverse10(b *testing.B)   { benchReverse(benchReverseInput[10], b) }
+func BenchmarkReverse20(b *testing.B)   { benchReverse(benchReverseInput[20], b) }
+func BenchmarkReverse30(b *testing.B)   { benchReverse(benchReverseInput[30], b) }
+func BenchmarkReverse100(b *testing.B)  { benchReverse(benchReverseInput[100], b) }
+func BenchmarkReverse200(b *testing.B)  { benchReverse(benchReverseInput[200], b) }
+func BenchmarkReverse300(b *testing.B)  { benchReverse(benchReverseInput[300], b) }
+func BenchmarkReverse1000(b *testing.B) { benchReverse(benchReverseInput[1000], b) }
+func BenchmarkReverse2000(b *testing.B) { benchReverse(benchReverseInput[2000], b) }
+func BenchmarkReverse3000(b *testing.B) { benchReverse(benchReverseInput[3000], b) }
 
 func TestConcat(t *testing.T) {
 	cases := []struct {
