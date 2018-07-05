@@ -4,9 +4,16 @@ import (
 	"testing"
 )
 
+type stringPair struct {
+	a, b string
+}
+
 var (
-	benchResult       string
-	benchReverseInput map[int]string
+	benchReverseResult   string
+	benchReverseInput    map[int]string
+	benchConcatResultStr string
+	benchConcatResultInt int
+	benchConcatInput     map[int]stringPair
 )
 
 func init() {
@@ -14,16 +21,31 @@ func init() {
 		0:    "",
 		1:    RandAlphaNumeric(1),
 		2:    RandAlphaNumeric(2),
-		3:    RandAlphaNumeric(3),
+		5:    RandAlphaNumeric(5),
 		10:   RandAlphaNumeric(10),
 		20:   RandAlphaNumeric(20),
-		30:   RandAlphaNumeric(30),
+		50:   RandAlphaNumeric(50),
 		100:  RandAlphaNumeric(100),
 		200:  RandAlphaNumeric(200),
-		300:  RandAlphaNumeric(300),
+		500:  RandAlphaNumeric(500),
 		1000: RandAlphaNumeric(1000),
 		2000: RandAlphaNumeric(2000),
-		3000: RandAlphaNumeric(3000),
+		5000: RandAlphaNumeric(5000),
+	}
+	benchConcatInput = map[int]stringPair{
+		0:    stringPair{"", ""},
+		1:    stringPair{RandAlphaNumeric(1), RandAlphaNumeric(1)},
+		2:    stringPair{RandAlphaNumeric(2), RandAlphaNumeric(2)},
+		5:    stringPair{RandAlphaNumeric(5), RandAlphaNumeric(5)},
+		10:   stringPair{RandAlphaNumeric(10), RandAlphaNumeric(10)},
+		20:   stringPair{RandAlphaNumeric(20), RandAlphaNumeric(20)},
+		50:   stringPair{RandAlphaNumeric(50), RandAlphaNumeric(50)},
+		100:  stringPair{RandAlphaNumeric(100), RandAlphaNumeric(100)},
+		200:  stringPair{RandAlphaNumeric(200), RandAlphaNumeric(200)},
+		500:  stringPair{RandAlphaNumeric(500), RandAlphaNumeric(500)},
+		1000: stringPair{RandAlphaNumeric(1000), RandAlphaNumeric(1000)},
+		2000: stringPair{RandAlphaNumeric(2000), RandAlphaNumeric(2000)},
+		5000: stringPair{RandAlphaNumeric(5000), RandAlphaNumeric(5000)},
 	}
 }
 
@@ -57,22 +79,22 @@ func benchReverse(s string, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		r = Reverse(s)
 	}
-	benchResult = r
+	benchReverseResult = r
 }
 
 func BenchmarkReverse0(b *testing.B)    { benchReverse(benchReverseInput[0], b) }
 func BenchmarkReverse1(b *testing.B)    { benchReverse(benchReverseInput[1], b) }
 func BenchmarkReverse2(b *testing.B)    { benchReverse(benchReverseInput[2], b) }
-func BenchmarkReverse3(b *testing.B)    { benchReverse(benchReverseInput[3], b) }
+func BenchmarkReverse5(b *testing.B)    { benchReverse(benchReverseInput[5], b) }
 func BenchmarkReverse10(b *testing.B)   { benchReverse(benchReverseInput[10], b) }
 func BenchmarkReverse20(b *testing.B)   { benchReverse(benchReverseInput[20], b) }
-func BenchmarkReverse30(b *testing.B)   { benchReverse(benchReverseInput[30], b) }
+func BenchmarkReverse50(b *testing.B)   { benchReverse(benchReverseInput[50], b) }
 func BenchmarkReverse100(b *testing.B)  { benchReverse(benchReverseInput[100], b) }
 func BenchmarkReverse200(b *testing.B)  { benchReverse(benchReverseInput[200], b) }
-func BenchmarkReverse300(b *testing.B)  { benchReverse(benchReverseInput[300], b) }
+func BenchmarkReverse500(b *testing.B)  { benchReverse(benchReverseInput[500], b) }
 func BenchmarkReverse1000(b *testing.B) { benchReverse(benchReverseInput[1000], b) }
 func BenchmarkReverse2000(b *testing.B) { benchReverse(benchReverseInput[2000], b) }
-func BenchmarkReverse3000(b *testing.B) { benchReverse(benchReverseInput[3000], b) }
+func BenchmarkReverse5000(b *testing.B) { benchReverse(benchReverseInput[5000], b) }
 
 func TestConcat(t *testing.T) {
 	cases := []struct {
@@ -103,3 +125,51 @@ func TestConcat(t *testing.T) {
 		}
 	}
 }
+
+func benchRuneConcat(p stringPair, b *testing.B) {
+	var s string
+	var c int
+	for n := 0; n < b.N; n++ {
+		s, c = RuneConcat(p.a, p.b)
+	}
+	benchConcatResultStr = s
+	benchConcatResultInt = c
+}
+
+func BenchmarkRuneConcat0(b *testing.B)    { benchRuneConcat(benchConcatInput[0], b) }
+func BenchmarkRuneConcat1(b *testing.B)    { benchRuneConcat(benchConcatInput[1], b) }
+func BenchmarkRuneConcat2(b *testing.B)    { benchRuneConcat(benchConcatInput[2], b) }
+func BenchmarkRuneConcat5(b *testing.B)    { benchRuneConcat(benchConcatInput[5], b) }
+func BenchmarkRuneConcat10(b *testing.B)   { benchRuneConcat(benchConcatInput[10], b) }
+func BenchmarkRuneConcat20(b *testing.B)   { benchRuneConcat(benchConcatInput[20], b) }
+func BenchmarkRuneConcat50(b *testing.B)   { benchRuneConcat(benchConcatInput[50], b) }
+func BenchmarkRuneConcat100(b *testing.B)  { benchRuneConcat(benchConcatInput[100], b) }
+func BenchmarkRuneConcat200(b *testing.B)  { benchRuneConcat(benchConcatInput[200], b) }
+func BenchmarkRuneConcat500(b *testing.B)  { benchRuneConcat(benchConcatInput[500], b) }
+func BenchmarkRuneConcat1000(b *testing.B) { benchRuneConcat(benchConcatInput[1000], b) }
+func BenchmarkRuneConcat2000(b *testing.B) { benchRuneConcat(benchConcatInput[2000], b) }
+func BenchmarkRuneConcat5000(b *testing.B) { benchRuneConcat(benchConcatInput[5000], b) }
+
+func benchConcat(p stringPair, b *testing.B) {
+	var s string
+	var c int
+	for n := 0; n < b.N; n++ {
+		s, c = Concat(p.a, p.b)
+	}
+	benchConcatResultStr = s
+	benchConcatResultInt = c
+}
+
+func BenchmarkConcat0(b *testing.B)    { benchConcat(benchConcatInput[0], b) }
+func BenchmarkConcat1(b *testing.B)    { benchConcat(benchConcatInput[1], b) }
+func BenchmarkConcat2(b *testing.B)    { benchConcat(benchConcatInput[2], b) }
+func BenchmarkConcat5(b *testing.B)    { benchConcat(benchConcatInput[5], b) }
+func BenchmarkConcat10(b *testing.B)   { benchConcat(benchConcatInput[10], b) }
+func BenchmarkConcat20(b *testing.B)   { benchConcat(benchConcatInput[20], b) }
+func BenchmarkConcat50(b *testing.B)   { benchConcat(benchConcatInput[50], b) }
+func BenchmarkConcat100(b *testing.B)  { benchConcat(benchConcatInput[100], b) }
+func BenchmarkConcat200(b *testing.B)  { benchConcat(benchConcatInput[200], b) }
+func BenchmarkConcat500(b *testing.B)  { benchConcat(benchConcatInput[500], b) }
+func BenchmarkConcat1000(b *testing.B) { benchConcat(benchConcatInput[1000], b) }
+func BenchmarkConcat2000(b *testing.B) { benchConcat(benchConcatInput[2000], b) }
+func BenchmarkConcat5000(b *testing.B) { benchConcat(benchConcatInput[5000], b) }

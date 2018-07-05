@@ -36,7 +36,7 @@ func Reverse(s string) string {
 	return string(r)
 }
 
-func Concat(s, t string) (string, int) {
+func RuneConcat(s, t string) (string, int) {
 	sn := utf8.RuneCountInString(s)
 	tn := utf8.RuneCountInString(t)
 	// some initial checks to see if we can skip the
@@ -52,6 +52,25 @@ func Concat(s, t string) (string, int) {
 	r := make([]rune, sn+tn)
 	m := copy(r, []rune(s))
 	n := copy(r[m:], []rune(t))
+	return string(r), m + n
+}
+
+func Concat(s, t string) (string, int) {
+	sn := len(s)
+	tn := len(t)
+	// some initial checks to see if we can skip the
+	// alloc/copying entirely
+	switch {
+	case 0 == sn && 0 == tn:
+		return "", 0
+	case 0 == sn:
+		return t, tn
+	case 0 == tn:
+		return s, sn
+	}
+	r := make([]byte, sn+tn)
+	m := copy(r, s)
+	n := copy(r[m:], t)
 	return string(r), m + n
 }
 
