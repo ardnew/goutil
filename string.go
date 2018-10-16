@@ -8,6 +8,10 @@
 package goutil
 
 import (
+	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"fmt"
 	"math/rand"
 	"time"
 	"unicode/utf8"
@@ -22,6 +26,18 @@ func init() {
 	alphaRune = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	alphaNumericRune = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	rand.Seed(time.Now().UTC().UnixNano())
+}
+
+func MD5(s string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
+}
+
+func SHA1(s string) string {
+	return fmt.Sprintf("%x", sha1.Sum([]byte(s)))
+}
+
+func SHA256(s string) string {
+	return fmt.Sprintf("%x", sha256.Sum256([]byte(s)))
 }
 
 func Reverse(s string) string {
