@@ -55,8 +55,7 @@ func Reverse(s string) string {
 func RuneConcat(s, t string) (string, int) {
 	sn := utf8.RuneCountInString(s)
 	tn := utf8.RuneCountInString(t)
-	// some initial checks to see if we can skip the
-	// alloc/copying entirely
+	// some initial checks to see if we can skip the alloc/copying entirely
 	switch {
 	case 0 == sn && 0 == tn:
 		return "", 0
@@ -74,8 +73,7 @@ func RuneConcat(s, t string) (string, int) {
 func Concat(s, t string) (string, int) {
 	sn := len(s)
 	tn := len(t)
-	// some initial checks to see if we can skip the
-	// alloc/copying entirely
+	// some initial checks to see if we can skip the alloc/copying entirely
 	switch {
 	case 0 == sn && 0 == tn:
 		return "", 0
@@ -106,4 +104,32 @@ func RandAlphaNumeric(n uint) string {
 		s[i] = alphaNumericRune[rand.Intn(m)]
 	}
 	return string(s)
+}
+
+func SizeStr(bytes int64, showBytes bool) string {
+
+	kb := float32(bytes) / 1024.0
+	mb := float32(kb) / 1024.0
+	gb := float32(mb) / 1024.0
+	tb := float32(gb) / 1024.0
+	ss := ""
+
+	switch {
+	case uint64(tb) > 0:
+		ss = fmt.Sprintf("%.3g TiB", tb)
+	case uint64(gb) > 0:
+		ss = fmt.Sprintf("%.3g GiB", gb)
+	case uint64(mb) > 0:
+		ss = fmt.Sprintf("%.3g MiB", mb)
+	case uint64(kb) > 0:
+		ss = fmt.Sprintf("%.3g KiB", kb)
+	default:
+		ss = fmt.Sprintf("%d B", bytes)
+		showBytes = false
+	}
+
+	if showBytes {
+		ss = fmt.Sprintf("%s (%d B)", ss, bytes)
+	}
+	return ss
 }
